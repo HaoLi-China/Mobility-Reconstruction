@@ -18,7 +18,7 @@ public:
 	static PointSet* read(const std::string& file_name);
 
 	// save the point set to a file. return false if failed.
-	static bool		 save(const std::string& file_name, const PointSet* point_set);
+	static bool	save(const std::string& file_name, const PointSet* point_set);
 
 protected:
 	static void load_xyz(PointSet* pointSet, const std::string& file_name) ;
@@ -36,6 +36,9 @@ protected:
 	static void save_pnc(const PointSet* pointSet, const std::string& file_name);
 	static void load_bpnc(PointSet* pointSet, const std::string& file_name);
 	static void save_bpnc(const PointSet* pointSet, const std::string& file_name);
+
+	//get columns of the file 
+	static int get_file_cols(const std::string& file_name);
 };
 
 #endif
