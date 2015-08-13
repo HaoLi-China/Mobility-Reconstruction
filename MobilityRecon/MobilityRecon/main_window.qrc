@@ -1,4 +1,9 @@
 <RCC>
     <qresource prefix="MainWindow">
+	    <file>Resources/Crystal_Project_Exit.png</file>
+        <file>Resources/Cute-Ball-Favorites-icon.png</file>
+        <file>Resources/splash.png</file>
+        <file>Resources/fileimport.png</file>
+		<file>Resources/fileopen.png</file>
     </qresource>
 </RCC>

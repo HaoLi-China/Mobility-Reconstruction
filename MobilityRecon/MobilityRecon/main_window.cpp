@@ -15,11 +15,11 @@
 #include "../../file_io/point_set_io.h"
 
 MainWindow::MainWindow(QWidget *parent)
-	: QMainWindow(parent)
-	, curDataDirectory_(".")
-	, auto_focus_(false)
-	, selected_only_(false)
-	, highlighting_(false)
+: QMainWindow(parent)
+, curDataDirectory_(".")
+, auto_focus_(false)
+, selected_only_(false)
+, highlighting_(false)
 {
 	ui.setupUi(this);
 
@@ -56,6 +56,8 @@ MainWindow::MainWindow(QWidget *parent)
 	leftSplitter = new QSplitter(Qt::Vertical, mainSplitter);
 	leftSplitter->addWidget(mainCanvas_);
 	seqSlider = new QSlider(Qt::Horizontal, leftSplitter);
+	seqSlider->setMaximum(0);
+	seqSlider->setVisible(false);
 
 	//need to modify
 	secondCanvas_ = new PaintCanvas(this, format, CT_FRONT);
@@ -71,12 +73,12 @@ MainWindow::MainWindow(QWidget *parent)
 	mainSplitter->addWidget(rightSplitter);
 
 	setCentralWidget(mainSplitter);
-	
+
 
 	/////////////////////////////////////////////////////////////////////
-	createMenus();
+	//createMenus();
 	createActions();
-
+	connect(seqSlider, SIGNAL(valueChanged(int)), this, SLOT(ChangeFrame(int)));
 
 	setWindowState(Qt::WindowMaximized);
 	setFocusPolicy(Qt::StrongFocus);
@@ -123,14 +125,14 @@ MainWindow::~MainWindow()
 //	numEdgesLabel_->setText(edges);
 //}
 
-void MainWindow::createMenus() {
-	/*actionSeparator = ui.menuFile->addSeparator();
-
-	QList<QAction*> actions;
-	for (int i = 0; i < MaxRecentFiles; ++i)
-	actions.push_back(actionsRecentFile[i]);
-	ui.menuFile->insertActions(ui.actionExit, actions);*/
-}
+//void MainWindow::createMenus() {
+//	/*actionSeparator = ui.menuFile->addSeparator();
+//
+//	QList<QAction*> actions;
+//	for (int i = 0; i < MaxRecentFiles; ++i)
+//	actions.push_back(actionsRecentFile[i]);
+//	ui.menuFile->insertActions(ui.actionExit, actions);*/
+//}
 
 void MainWindow::createActions() {
 	// file menu
@@ -146,6 +148,7 @@ void MainWindow::createActionsForFileMenu() {
 	//}
 
 	connect(ui.actionOpen, SIGNAL(triggered()), this, SLOT(open()));
+	connect(ui.actionImport, SIGNAL(triggered()), this, SLOT(import()));
 	connect(ui.actionExit, SIGNAL(triggered()), this, SLOT(close()));
 	ui.actionExit->setShortcut(QString("Ctrl+Q"));
 }
@@ -153,6 +156,8 @@ void MainWindow::createActionsForFileMenu() {
 
 bool MainWindow::open()
 {
+	seqSlider->setVisible(false);
+
 	QString fileName = QFileDialog::getOpenFileName(this,
 		tr("Open file"), curDataDirectory_,
 		tr("Supported format (*.ply *.obj *.eobj *.off *.stl *.ply2 *.xyz *.bxyz *.pn *.bpn *.pnc *.bpnc *.mesh *.meshb *.tet)\n"
@@ -170,22 +175,28 @@ bool MainWindow::open()
 	return doOpen(fileName);
 }
 
-//bool MainWindow::import()
-//{
-//	QString fileName = QFileDialog::getOpenFileName(this,
-//		tr("Open file"), curDataDirectory_,
-//		tr("Supported format (*.txt)\n"
-//		"All format (*.*)")
-//		);
-//
-//	if (fileName.isEmpty())
-//		return false;
-//
-//	if (fileName == curFileName_)
-//		return false;
-//
-//	return canvas()->loadScene(fileName.toStdString());
-//}
+bool MainWindow::import()
+{
+	seqSlider->setVisible(true);
+
+	allFileNames.clear();
+	removeAllObjects();
+	
+	allFileNames = QFileDialog::getOpenFileNames(this,
+		tr("Import file"), curDataDirectory_,
+		tr("Supported format (*.ply *.obj *.eobj *.off *.stl *.ply2 *.xyz *.bxyz *.pn *.bpn *.pnc *.bpnc *.mesh *.meshb *.tet)\n"
+		"Mesh format (*.ply *.obj *.eobj *.off *.stl *.ply2)\n"
+		"Point set format (*.ply *.xyz *.bxyz *.pn *.bpn *.pnc *.bpnc)\n"
+		"All format (*.*)")
+		);
+
+	if (allFileNames.isEmpty())
+		return false;
+	
+	seqSlider->setMaximum(allFileNames.size() - 1);
+	seqSlider->setValue(0);
+	return doOpen(allFileNames[0]);
+}
 
 bool MainWindow::doOpen(const QString &fileName)
 {
@@ -306,6 +317,16 @@ void MainWindow::showAllObjects() {
 	}
 }
 
+//remove all objects
+void MainWindow::removeAllObjects() {
+	const std::vector<Object*>& objects = canvas()->objectsManager()->objects();
+	for (int i = 0; i < objects.size(); ++i) {
+		Object* obj = objects[i];
+		deleteObject(obj, false, true);
+		canvas()->objectsManager()->delete_object(obj, false);  // after this, there will be an active one, or no object exists 
+	}
+}
+
 void MainWindow::addObject(Object* obj, bool activate, bool fit) {
 	if (obj) {
 		obj->set_canvas(canvas());
@@ -358,4 +379,10 @@ void MainWindow::activateObject(const Object* obj, bool fit) {
 	//updateObjectPanel();
 	//updateRenderingPanel();
 	//updateStatusBar();
+}
+
+// change depth frame
+void MainWindow::ChangeFrame(int index){
+	removeAllObjects();
+	doOpen(allFileNames[index]);
 }

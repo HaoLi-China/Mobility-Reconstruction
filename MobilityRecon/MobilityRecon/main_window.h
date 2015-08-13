@@ -49,8 +49,10 @@ public:
 
 	public Q_SLOTS:
 	bool open();
-	//bool import();
+	bool import();
 	//bool save();
+
+	void ChangeFrame(int index);
 
 
 private:
@@ -66,6 +68,7 @@ private:
 
 	void hideOtherObjects(Object* obj);
 	void showAllObjects();
+	void removeAllObjects();
 
 private:
 	Ui::MainWindowClass ui;
@@ -98,6 +101,8 @@ private:
 	bool	auto_focus_;
 	bool    selected_only_;
 	bool    highlighting_;
+
+	QStringList allFileNames;
 };
 
 #endif // MAIN_WINDOW_H

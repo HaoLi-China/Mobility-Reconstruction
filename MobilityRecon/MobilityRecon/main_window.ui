@@ -32,6 +32,8 @@
      <string>File</string>
     </property>
     <addaction name="actionOpen"/>
+    <addaction name="actionImport"/>
+    <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
    <addaction name="menuFile"/>
@@ -41,16 +43,18 @@
     <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
-    <bool>false</bool>
+    <bool>true</bool>
    </attribute>
    <addaction name="actionOpen"/>
+   <addaction name="actionImport"/>
+   <addaction name="separator"/>
    <addaction name="actionExit"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionOpen">
    <property name="icon">
-    <iconset>
-     <normaloff>Resources/fileopen.png</normaloff>Resources/fileopen.png</iconset>
+    <iconset resource="main_window.qrc">
+     <normaloff>:/MainWindow/Resources/fileopen.png</normaloff>:/MainWindow/Resources/fileopen.png</iconset>
    </property>
    <property name="text">
     <string>Open</string>
@@ -58,11 +62,20 @@
   </action>
   <action name="actionExit">
    <property name="icon">
-    <iconset>
-     <normaloff>Resources/Crystal_Project_Exit.png</normaloff>Resources/Crystal_Project_Exit.png</iconset>
+    <iconset resource="main_window.qrc">
+     <normaloff>:/MainWindow/Resources/Crystal_Project_Exit.png</normaloff>:/MainWindow/Resources/Crystal_Project_Exit.png</iconset>
    </property>
    <property name="text">
     <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionImport">
+   <property name="icon">
+    <iconset resource="main_window.qrc">
+     <normaloff>:/MainWindow/Resources/fileimport.png</normaloff>:/MainWindow/Resources/fileimport.png</iconset>
+   </property>
+   <property name="text">
+    <string>Import</string>
    </property>
   </action>
  </widget>
