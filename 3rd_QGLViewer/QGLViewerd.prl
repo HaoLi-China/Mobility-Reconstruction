@@ -1,0 +1,5 @@
+QMAKE_PRL_BUILD_DIR = D:/before/tools/libQGLViewer-2.6.3/QGLViewer
+QMAKE_PRO_INPUT = QGLViewer.pro
+QMAKE_PRL_TARGET = QGLViewerd
+QMAKE_PRL_CONFIG = lex yacc debug exceptions depend_includepath testcase_targets import_plugins import_qpa_plugin incremental_off windows qt warn_on link_prl incremental flat precompile_header autogen_precompile_source debug_and_release debug_and_release_target embed_manifest_dll embed_manifest_exe c++11 shared rtti no_plugin_manifest qpa win32 msvc copy_dir_files debug DebugBuild Debug build_pass debug DebugBuild Debug build_pass opengl thread create_prl no_keywords build_all debug DebugBuild Debug build_pass have_target dll no_plist exclusive_builds debug_info no_autoqmake uic opengl moc resources
+QMAKE_PRL_VERSION = 2

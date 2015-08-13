@@ -1,0 +1,248 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="ANN">
+      <UniqueIdentifier>{b00c1e81-7396-475b-b8d8-d69e80417eec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ETH_Kd_Tree">
+      <UniqueIdentifier>{7c8bd220-9800-4b57-8b22-fe2051ed1495}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FLANN">
+      <UniqueIdentifier>{b633ed22-fcf0-4387-968d-09490db6276c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="kdtree_search.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="kdtree_search_ann.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="kdtree_search_eth.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="kdtree_search_flann.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ANN\ANN.cpp">
+      <Filter>ANN</Filter>
+    </ClCompile>
+    <ClCompile Include="ANN\bd_fix_rad_search.cpp">
+      <Filter>ANN</Filter>
+    </ClCompile>
+    <ClCompile Include="ANN\bd_pr_search.cpp">
+      <Filter>ANN</Filter>
+    </ClCompile>
+    <ClCompile Include="ANN\bd_search.cpp">
+      <Filter>ANN</Filter>
+    </ClCompile>
+    <ClCompile Include="ANN\bd_tree.cpp">
+      <Filter>ANN</Filter>
+    </ClCompile>
+    <ClCompile Include="ANN\brute.cpp">
+      <Filter>ANN</Filter>
+    </ClCompile>
+    <ClCompile Include="ANN\kd_dump.cpp">
+      <Filter>ANN</Filter>
+    </ClCompile>
+    <ClCompile Include="ANN\kd_fix_rad_search.cpp">
+      <Filter>ANN</Filter>
+    </ClCompile>
+    <ClCompile Include="ANN\kd_pr_search.cpp">
+      <Filter>ANN</Filter>
+    </ClCompile>
+    <ClCompile Include="ANN\kd_search.cpp">
+      <Filter>ANN</Filter>
+    </ClCompile>
+    <ClCompile Include="ANN\kd_split.cpp">
+      <Filter>ANN</Filter>
+    </ClCompile>
+    <ClCompile Include="ANN\kd_tree.cpp">
+      <Filter>ANN</Filter>
+    </ClCompile>
+    <ClCompile Include="ANN\kd_util.cpp">
+      <Filter>ANN</Filter>
+    </ClCompile>
+    <ClCompile Include="ANN\perf.cpp">
+      <Filter>ANN</Filter>
+    </ClCompile>
+    <ClCompile Include="ETH_Kd_Tree\kdTree.cpp">
+      <Filter>ETH_Kd_Tree</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="kdtree_common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="kdtree_search.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="kdtree_search_ann.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="kdtree_search_eth.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="kdtree_search_flann.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ANN\ANN.h">
+      <Filter>ANN</Filter>
+    </ClInclude>
+    <ClInclude Include="ANN\ANNperf.h">
+      <Filter>ANN</Filter>
+    </ClInclude>
+    <ClInclude Include="ANN\ANNx.h">
+      <Filter>ANN</Filter>
+    </ClInclude>
+    <ClInclude Include="ANN\bd_tree.h">
+      <Filter>ANN</Filter>
+    </ClInclude>
+    <ClInclude Include="ANN\kd_fix_rad_search.h">
+      <Filter>ANN</Filter>
+    </ClInclude>
+    <ClInclude Include="ANN\kd_pr_search.h">
+      <Filter>ANN</Filter>
+    </ClInclude>
+    <ClInclude Include="ANN\kd_search.h">
+      <Filter>ANN</Filter>
+    </ClInclude>
+    <ClInclude Include="ANN\kd_split.h">
+      <Filter>ANN</Filter>
+    </ClInclude>
+    <ClInclude Include="ANN\kd_tree.h">
+      <Filter>ANN</Filter>
+    </ClInclude>
+    <ClInclude Include="ANN\kd_util.h">
+      <Filter>ANN</Filter>
+    </ClInclude>
+    <ClInclude Include="ANN\pr_queue.h">
+      <Filter>ANN</Filter>
+    </ClInclude>
+    <ClInclude Include="ANN\pr_queue_k.h">
+      <Filter>ANN</Filter>
+    </ClInclude>
+    <ClInclude Include="ETH_Kd_Tree\kdTree.h">
+      <Filter>ETH_Kd_Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="ETH_Kd_Tree\PriorityQueue.h">
+      <Filter>ETH_Kd_Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="ETH_Kd_Tree\QueryGrid.h">
+      <Filter>ETH_Kd_Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="ETH_Kd_Tree\vector2D.h">
+      <Filter>ETH_Kd_Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="ETH_Kd_Tree\vector3D.h">
+      <Filter>ETH_Kd_Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="FLANN\algorithms\all_indices.h">
+      <Filter>FLANN</Filter>
+    </ClInclude>
+    <ClInclude Include="FLANN\util\allocator.h">
+      <Filter>FLANN</Filter>
+    </ClInclude>
+    <ClInclude Include="FLANN\util\any.h">
+      <Filter>FLANN</Filter>
+    </ClInclude>
+    <ClInclude Include="FLANN\algorithms\autotuned_index.h">
+      <Filter>FLANN</Filter>
+    </ClInclude>
+    <ClInclude Include="FLANN\algorithms\center_chooser.h">
+      <Filter>FLANN</Filter>
+    </ClInclude>
+    <ClInclude Include="FLANN\algorithms\composite_index.h">
+      <Filter>FLANN</Filter>
+    </ClInclude>
+    <ClInclude Include="FLANN\config.h">
+      <Filter>FLANN</Filter>
+    </ClInclude>
+    <ClInclude Include="FLANN\defines.h">
+      <Filter>FLANN</Filter>
+    </ClInclude>
+    <ClInclude Include="FLANN\algorithms\dist.h">
+      <Filter>FLANN</Filter>
+    </ClInclude>
+    <ClInclude Include="FLANN\util\dynamic_bitset.h">
+      <Filter>FLANN</Filter>
+    </ClInclude>
+    <ClInclude Include="FLANN\flann.hpp">
+      <Filter>FLANN</Filter>
+    </ClInclude>
+    <ClInclude Include="FLANN\general.h">
+      <Filter>FLANN</Filter>
+    </ClInclude>
+    <ClInclude Include="FLANN\nn\ground_truth.h">
+      <Filter>FLANN</Filter>
+    </ClInclude>
+    <ClInclude Include="FLANN\util\heap.h">
+      <Filter>FLANN</Filter>
+    </ClInclude>
+    <ClInclude Include="FLANN\algorithms\hierarchical_clustering_index.h">
+      <Filter>FLANN</Filter>
+    </ClInclude>
+    <ClInclude Include="FLANN\nn\index_testing.h">
+      <Filter>FLANN</Filter>
+    </ClInclude>
+    <ClInclude Include="FLANN\algorithms\kdtree_index.h">
+      <Filter>FLANN</Filter>
+    </ClInclude>
+    <ClInclude Include="FLANN\algorithms\kdtree_single_index.h">
+      <Filter>FLANN</Filter>
+    </ClInclude>
+    <ClInclude Include="FLANN\algorithms\kmeans_index.h">
+      <Filter>FLANN</Filter>
+    </ClInclude>
+    <ClInclude Include="FLANN\algorithms\linear_index.h">
+      <Filter>FLANN</Filter>
+    </ClInclude>
+    <ClInclude Include="FLANN\util\logger.h">
+      <Filter>FLANN</Filter>
+    </ClInclude>
+    <ClInclude Include="FLANN\algorithms\lsh_index.h">
+      <Filter>FLANN</Filter>
+    </ClInclude>
+    <ClInclude Include="FLANN\util\lsh_table.h">
+      <Filter>FLANN</Filter>
+    </ClInclude>
+    <ClInclude Include="FLANN\util\matrix.h">
+      <Filter>FLANN</Filter>
+    </ClInclude>
+    <ClInclude Include="FLANN\algorithms\nn_index.h">
+      <Filter>FLANN</Filter>
+    </ClInclude>
+    <ClInclude Include="FLANN\util\params.h">
+      <Filter>FLANN</Filter>
+    </ClInclude>
+    <ClInclude Include="FLANN\util\random.h">
+      <Filter>FLANN</Filter>
+    </ClInclude>
+    <ClInclude Include="FLANN\util\result_set.h">
+      <Filter>FLANN</Filter>
+    </ClInclude>
+    <ClInclude Include="FLANN\util\sampling.h">
+      <Filter>FLANN</Filter>
+    </ClInclude>
+    <ClInclude Include="FLANN\util\saving.h">
+      <Filter>FLANN</Filter>
+    </ClInclude>
+    <ClInclude Include="FLANN\util\serialization.h">
+      <Filter>FLANN</Filter>
+    </ClInclude>
+    <ClInclude Include="FLANN\util\timer.h">
+      <Filter>FLANN</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,25 @@
+[MobilityRecon] --- started at: Thu Aug 13 12:56:02 2015 ---
+[PaintCanvas] initializing...
+[PaintCanvas] Using GLEW: 1.11.0
+[PaintCanvas] GL Vendor: NVIDIA Corporation
+[PaintCanvas] GL Renderer: GeForce GT 640/PCIe/SSE2
+[PaintCanvas] GL Version: 4.5.0 NVIDIA 347.62
+[PaintCanvas] GLSL Version: 4.50 NVIDIA
+[PaintCanvas] initializing...
+[PaintCanvas] Using GLEW: 1.11.0
+[PaintCanvas] GL Vendor: NVIDIA Corporation
+[PaintCanvas] GL Renderer: GeForce GT 640/PCIe/SSE2
+[PaintCanvas] GL Version: 4.5.0 NVIDIA 347.62
+[PaintCanvas] GLSL Version: 4.50 NVIDIA
+[PaintCanvas] initializing...
+[PaintCanvas] Using GLEW: 1.11.0
+[PaintCanvas] GL Vendor: NVIDIA Corporation
+[PaintCanvas] GL Renderer: GeForce GT 640/PCIe/SSE2
+[PaintCanvas] GL Version: 4.5.0 NVIDIA 347.62
+[PaintCanvas] GLSL Version: 4.50 NVIDIA
+[MapIO] reading file ...
+[MapBuilder] Warning: Encountered 4 non-manifold vertices (fixed)
+[MapIO] done. Time=1.15
+[ShaderFactory] Error: could not open file:'./resource/gpu/sphere.vs'
+[PointAsSphere] Error: failed creating vertex program
+[Logger] terminating...
