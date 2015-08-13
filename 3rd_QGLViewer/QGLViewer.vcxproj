@@ -74,7 +74,7 @@
       <ExceptionHandling>Sync</ExceptionHandling>
       <ObjectFileName>$(IntDir)</ObjectFileName>
       <Optimization>MaxSpeed</Optimization>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;WIN64;CREATE_QGLVIEWER_DLL;NOMINMAX;QT_NO_DEBUG;QT_NO_KEYWORDS;QT_OPENGL_LIB;QT_WIDGETS_LIB;QT_GUI_LIB;QT_XML_LIB;QT_CORE_LIB;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;WIN64;CREATE_QGLVIEWER_DLL;NOMINMAX;QT_NO_DEBUG;QT_NO_KEYWORDS;QT_OPENGL_LIB;QT_WIDGETS_LIB;QT_GUI_LIB;QT_XML_LIB;QT_CORE_LIB;NDEBUG;QT_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
       <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -118,7 +118,7 @@
       <ExceptionHandling>Sync</ExceptionHandling>
       <ObjectFileName>$(IntDir)</ObjectFileName>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;WIN64;CREATE_QGLVIEWER_DLL;NOMINMAX;QT_NO_KEYWORDS;QT_OPENGL_LIB;QT_WIDGETS_LIB;QT_GUI_LIB;QT_XML_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;WIN64;CREATE_QGLVIEWER_DLL;NOMINMAX;QT_NO_KEYWORDS;QT_OPENGL_LIB;QT_WIDGETS_LIB;QT_GUI_LIB;QT_XML_LIB;QT_CORE_LIB;QT_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
@@ -231,17 +231,15 @@
     <CustomBuild Include="camera.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
 if errorlevel 1 goto VCEnd
-
 if errorlevel 1 goto VCEnd
 endlocal
-"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DCREATE_QGLVIEWER_DLL -DNOMINMAX -DQT_NO_DEBUG -DQT_NO_KEYWORDS -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB -DNDEBUG -D_WINDLL "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtXml" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2013"</Command>
+"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DCREATE_QGLVIEWER_DLL -DNOMINMAX -DQT_NO_DEBUG -DQT_NO_KEYWORDS -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB -DNDEBUG -D_WINDLL -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtXml" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I.\GeneratedFiles"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing camera.h...</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
 if errorlevel 1 goto VCEnd
-
 if errorlevel 1 goto VCEnd
 endlocal
-"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DCREATE_QGLVIEWER_DLL -DNOMINMAX -DQT_NO_KEYWORDS -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB -D_WINDLL "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtXml" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2013"</Command>
+"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DCREATE_QGLVIEWER_DLL -DNOMINMAX -DQT_NO_KEYWORDS -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB -D_WINDLL  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtXml" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I.\GeneratedFiles"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing camera.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
@@ -254,17 +252,15 @@ endlocal
     <CustomBuild Include="frame.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
 if errorlevel 1 goto VCEnd
-
 if errorlevel 1 goto VCEnd
 endlocal
-"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DCREATE_QGLVIEWER_DLL -DNOMINMAX -DQT_NO_DEBUG -DQT_NO_KEYWORDS -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB -DNDEBUG -D_WINDLL "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtXml" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2013"</Command>
+"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DCREATE_QGLVIEWER_DLL -DNOMINMAX -DQT_NO_DEBUG -DQT_NO_KEYWORDS -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB -DNDEBUG -D_WINDLL -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtXml" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I.\GeneratedFiles"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing frame.h...</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
 if errorlevel 1 goto VCEnd
-
 if errorlevel 1 goto VCEnd
 endlocal
-"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DCREATE_QGLVIEWER_DLL -DNOMINMAX -DQT_NO_KEYWORDS -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB -D_WINDLL "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtXml" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2013"</Command>
+"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DCREATE_QGLVIEWER_DLL -DNOMINMAX -DQT_NO_KEYWORDS -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB -D_WINDLL  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtXml" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I.\GeneratedFiles"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing frame.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
@@ -275,17 +271,15 @@ endlocal
     <CustomBuild Include="keyFrameInterpolator.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
 if errorlevel 1 goto VCEnd
-
 if errorlevel 1 goto VCEnd
 endlocal
-"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DCREATE_QGLVIEWER_DLL -DNOMINMAX -DQT_NO_DEBUG -DQT_NO_KEYWORDS -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB -DNDEBUG -D_WINDLL "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtXml" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2013"</Command>
+"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DCREATE_QGLVIEWER_DLL -DNOMINMAX -DQT_NO_DEBUG -DQT_NO_KEYWORDS -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB -DNDEBUG -D_WINDLL -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtXml" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I.\GeneratedFiles"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing keyFrameInterpolator.h...</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
 if errorlevel 1 goto VCEnd
-
 if errorlevel 1 goto VCEnd
 endlocal
-"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DCREATE_QGLVIEWER_DLL -DNOMINMAX -DQT_NO_KEYWORDS -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB -D_WINDLL "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtXml" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2013"</Command>
+"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DCREATE_QGLVIEWER_DLL -DNOMINMAX -DQT_NO_KEYWORDS -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB -D_WINDLL  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtXml" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I.\GeneratedFiles"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing keyFrameInterpolator.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
@@ -295,17 +289,15 @@ endlocal
     <CustomBuild Include="manipulatedCameraFrame.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
 if errorlevel 1 goto VCEnd
-
 if errorlevel 1 goto VCEnd
 endlocal
-"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DCREATE_QGLVIEWER_DLL -DNOMINMAX -DQT_NO_DEBUG -DQT_NO_KEYWORDS -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB -DNDEBUG -D_WINDLL "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtXml" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2013"</Command>
+"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DCREATE_QGLVIEWER_DLL -DNOMINMAX -DQT_NO_DEBUG -DQT_NO_KEYWORDS -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB -DNDEBUG -D_WINDLL -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtXml" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I.\GeneratedFiles"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing manipulatedCameraFrame.h...</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
 if errorlevel 1 goto VCEnd
-
 if errorlevel 1 goto VCEnd
 endlocal
-"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DCREATE_QGLVIEWER_DLL -DNOMINMAX -DQT_NO_KEYWORDS -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB -D_WINDLL "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtXml" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2013"</Command>
+"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DCREATE_QGLVIEWER_DLL -DNOMINMAX -DQT_NO_KEYWORDS -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB -D_WINDLL  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtXml" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I.\GeneratedFiles"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing manipulatedCameraFrame.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
@@ -315,17 +307,15 @@ endlocal
     <CustomBuild Include="manipulatedFrame.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
 if errorlevel 1 goto VCEnd
-
 if errorlevel 1 goto VCEnd
 endlocal
-"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DCREATE_QGLVIEWER_DLL -DNOMINMAX -DQT_NO_DEBUG -DQT_NO_KEYWORDS -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB -DNDEBUG -D_WINDLL "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtXml" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2013"</Command>
+"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DCREATE_QGLVIEWER_DLL -DNOMINMAX -DQT_NO_DEBUG -DQT_NO_KEYWORDS -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB -DNDEBUG -D_WINDLL -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtXml" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I.\GeneratedFiles"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing manipulatedFrame.h...</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
 if errorlevel 1 goto VCEnd
-
 if errorlevel 1 goto VCEnd
 endlocal
-"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DCREATE_QGLVIEWER_DLL -DNOMINMAX -DQT_NO_KEYWORDS -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB -D_WINDLL "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtXml" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2013"</Command>
+"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DCREATE_QGLVIEWER_DLL -DNOMINMAX -DQT_NO_KEYWORDS -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB -D_WINDLL  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtXml" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I.\GeneratedFiles"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing manipulatedFrame.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
@@ -336,17 +326,15 @@ endlocal
     <CustomBuild Include="qglviewer.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
 if errorlevel 1 goto VCEnd
-
 if errorlevel 1 goto VCEnd
 endlocal
-"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DCREATE_QGLVIEWER_DLL -DNOMINMAX -DQT_NO_DEBUG -DQT_NO_KEYWORDS -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB -DNDEBUG -D_WINDLL "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtXml" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2013"</Command>
+"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DCREATE_QGLVIEWER_DLL -DNOMINMAX -DQT_NO_DEBUG -DQT_NO_KEYWORDS -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB -DNDEBUG -D_WINDLL -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtXml" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I.\GeneratedFiles"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing qglviewer.h...</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
 if errorlevel 1 goto VCEnd
-
 if errorlevel 1 goto VCEnd
 endlocal
-"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DCREATE_QGLVIEWER_DLL -DNOMINMAX -DQT_NO_KEYWORDS -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB -D_WINDLL "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtXml" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2013"</Command>
+"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DCREATE_QGLVIEWER_DLL -DNOMINMAX -DQT_NO_KEYWORDS -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB -D_WINDLL  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtXml" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I.\GeneratedFiles"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing qglviewer.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
@@ -393,7 +381,7 @@ endlocal
   <ImportGroup Label="ExtensionTargets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties UicDir=".\GeneratedFiles" RccDir=".\GeneratedFiles" Qt5Version_x0020_x64="5.5.0" />
+      <UserProperties UicDir=".\GeneratedFiles" RccDir=".\GeneratedFiles" Qt5Version_x0020_x64="Qt5.5.0" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
