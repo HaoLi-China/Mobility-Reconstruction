@@ -149,7 +149,10 @@ void MainWindow::createActionsForFileMenu() {
 
 	connect(ui.actionOpen, SIGNAL(triggered()), this, SLOT(open()));
 	connect(ui.actionImport, SIGNAL(triggered()), this, SLOT(import()));
+	connect(ui.actionSnapshot, SIGNAL(triggered()), this, SLOT(snapshot()));
 	connect(ui.actionExit, SIGNAL(triggered()), this, SLOT(close()));
+	connect(ui.actionExportSequentialSnapshots, SIGNAL(triggered()), this, SLOT(export_sequential_snapshots()));
+
 	ui.actionExit->setShortcut(QString("Ctrl+Q"));
 }
 
@@ -157,6 +160,7 @@ void MainWindow::createActionsForFileMenu() {
 bool MainWindow::open()
 {
 	seqSlider->setVisible(false);
+	allFileNames.clear();
 
 	QString fileName = QFileDialog::getOpenFileName(this,
 		tr("Open file"), curDataDirectory_,
@@ -322,7 +326,6 @@ void MainWindow::removeAllObjects() {
 	const std::vector<Object*>& objects = canvas()->objectsManager()->objects();
 	for (int i = 0; i < objects.size(); ++i) {
 		Object* obj = objects[i];
-		deleteObject(obj, false, true);
 		canvas()->objectsManager()->delete_object(obj, false);  // after this, there will be an active one, or no object exists 
 	}
 }
@@ -385,4 +388,28 @@ void MainWindow::activateObject(const Object* obj, bool fit) {
 void MainWindow::ChangeFrame(int index){
 	removeAllObjects();
 	doOpen(allFileNames[index]);
+}
+
+//save snap shot
+void MainWindow::snapshot(){
+	canvas()->snapshotScreen();
+}
+
+//export sequential snapshots
+void MainWindow::export_sequential_snapshots(){
+	seqSlider->setVisible(false);
+
+	QString path = QFileDialog::getExistingDirectory(this,
+		tr("Export Sequential Snapshots"),
+		curDataDirectory_);
+
+	if(path.isEmpty()){
+		return;
+	}
+
+	for (int i = 0; i < allFileNames.size(); i++){
+		removeAllObjects();
+		doOpen(allFileNames[i]);
+		canvas()->snapshotScreen(path + "/" + QString::number(i, 10) + ".jpg");
+	}
 }

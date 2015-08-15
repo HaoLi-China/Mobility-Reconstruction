@@ -281,3 +281,29 @@ Map* PaintCanvas::mesh() const {
 PointSet* PaintCanvas::pointSet() const {
 	return dynamic_cast<PointSet*>(activeObject());
 }
+
+void PaintCanvas::snapshotScreen() {
+	bool need_hide = show_coord_sys_;
+	if (need_hide)
+		show_coord_sys_ = false;  // hide the coord system temporally
+
+	saveSnapshot(false);
+
+	if (need_hide) {
+		show_coord_sys_ = true;
+		updateGL();
+	}
+}
+
+void PaintCanvas::snapshotScreen(const QString &filename) {
+	bool need_hide = show_coord_sys_;
+	if (need_hide)
+		show_coord_sys_ = false;  // hide the coord system temporally
+
+	saveSnapshot(filename);
+
+	if (need_hide) {
+		show_coord_sys_ = true;
+		updateGL();
+	}
+}

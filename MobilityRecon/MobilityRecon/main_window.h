@@ -50,6 +50,8 @@ public:
 	public Q_SLOTS:
 	bool open();
 	bool import();
+	void snapshot();
+	void export_sequential_snapshots();
 	//bool save();
 
 	void ChangeFrame(int index);

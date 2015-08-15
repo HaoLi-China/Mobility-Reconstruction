@@ -61,6 +61,8 @@ protected:
 
 	public Q_SLOTS:
 	void fitScreen();
+	void snapshotScreen();
+	void snapshotScreen(const QString &filename);
 
 private:
 	void drawCornerAxis();

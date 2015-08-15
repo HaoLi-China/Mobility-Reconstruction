@@ -5,5 +5,7 @@
         <file>Resources/splash.png</file>
         <file>Resources/fileimport.png</file>
 		<file>Resources/fileopen.png</file>
+		<file>Resources/snap_shot.png</file>
+		<file>Resources/export_sequential_snapshots.png</file>
     </qresource>
 </RCC>
