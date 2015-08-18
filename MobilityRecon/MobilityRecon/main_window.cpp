@@ -14,7 +14,9 @@
 #include "../../geom/point_set.h"
 #include "../../file_io/map_io.h"
 #include "../../file_io/point_set_io.h"
+#include "../../file_io/point_set_serializer_ply.h"
 #include "../../kinect_io/depth_basic.h"
+#include "../../algo/point_set_normal_estimation.h"
 
 MainWindow::MainWindow(QWidget *parent)
 	: QMainWindow(parent)
@@ -22,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent)
 	, auto_focus_(false)
 	, selected_only_(false)
 	, highlighting_(false)
+	, is_save_when_scanning(false)
 {
 	ui.setupUi(this);
 
@@ -159,6 +162,7 @@ void MainWindow::createActionsForFileMenu() {
 	connect(ui.actionExportSequentialSnapshots, SIGNAL(triggered()), this, SLOT(export_sequential_snapshots()));
 	connect(ui.actionScanByKinect2, SIGNAL(triggered()), this, SLOT(scan_by_kinect2()));
 	connect(ui.actionStopScan, SIGNAL(triggered()), this, SLOT(stopScan()));
+	connect(ui.actionSaveWhenScanning, SIGNAL(toggled(bool)), this, SLOT(set_save_when_scan_flag(bool)));
 
 	ui.actionExit->setShortcut(QString("Ctrl+Q"));
 }
@@ -441,8 +445,17 @@ void MainWindow::doScan(int count){
 	if (obj) {
 		removeAllObjects();
 
-		if (count == 0){
+		if (is_save_when_scanning){
+			time_t nowtime;
+			nowtime = time(NULL); //get current time
 
+			std::stringstream stream;
+			stream << "scan/" << nowtime << ".ply";
+			std::string filename = stream.str();
+			doSave(obj, filename);
+		}
+
+		if (count == 0){
 			qglviewer::Vec vmin(-2.5f, -2.5f, 0.5f);
 			qglviewer::Vec vmax(2.5f, 2.5f, 5.5f);
 			canvas()->setSceneBoundingBox(vmin, vmax);
@@ -460,4 +473,50 @@ void MainWindow::doScan(int count){
 //HaoLi:stop scan
 void MainWindow::stopScan(){
 	scanthread->stopScan();
+	computeNormalForEachFrame();
+}
+
+//HaoLi:set saving flag when scanning
+void MainWindow::set_save_when_scan_flag(bool flag){
+	is_save_when_scanning = flag;
+
+	if (flag){
+		QDir dir("scan");
+		QFileInfoList file_list = dir.entryInfoList(QDir::Files);
+
+		for (int i = 0; i < file_list.size(); ++i) {
+			QFileInfo fileInfo = file_list.at(i);
+			QFile::remove("scan/" + fileInfo.fileName());
+		}
+	}
+}
+
+//HaoLi:saveData
+bool MainWindow::doSave(Object* obj, std::string filename){
+	bool bo;
+	if (dynamic_cast<Map*>(obj)) {
+		Map* map = dynamic_cast<Map*>(obj);
+		//......
+	}
+	else if (dynamic_cast<PointSet*>(obj)) {
+		PointSet* pset = dynamic_cast<PointSet*>(obj);
+		//PointSetNormalEstimation::apply(pset, false, 50);
+		bo = PointSetSerializer_ply::save(filename, pset);
+	}
+
+	return bo;
+}
+
+//HaoLi:compute normal for each frame
+void  MainWindow::computeNormalForEachFrame(){
+	QDir dir("scan");
+	QFileInfoList file_list = dir.entryInfoList(QDir::Files);
+
+	for (int i = 0; i < file_list.size(); ++i) {
+		status_message("Processing data, Wating...", 500);
+		QFileInfo fileInfo = file_list.at(i);
+		PointSet* pset = PointSetIO::read(("scan/" + fileInfo.fileName()).toStdString());
+		PointSetNormalEstimation::apply(pset, false, 50);
+		doSave(pset, ("scan/" + fileInfo.fileName()).toStdString());
+	}
 }

@@ -21,6 +21,9 @@
     <ClCompile Include="poisson_reconstruction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="point_set_normal_estimation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="algo_common.h">
@@ -30,6 +33,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="poisson_reconstruction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="point_set_normal_estimation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

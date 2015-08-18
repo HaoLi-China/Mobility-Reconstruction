@@ -61,6 +61,7 @@ public:
 	void ChangeFrame(int index);
 	void doScan(int count);
 	void stopScan();
+	void set_save_when_scan_flag(bool flag);
 
 
 private:
@@ -77,6 +78,9 @@ private:
 	void hideOtherObjects(Object* obj);
 	void showAllObjects();
 	void removeAllObjects();
+
+	bool doSave(Object* obj, std::string filename);
+	void computeNormalForEachFrame();
 
 private:
 	Ui::MainWindowClass ui;
@@ -112,6 +116,8 @@ private:
 	bool	auto_focus_;
 	bool    selected_only_;
 	bool    highlighting_;
+
+	bool    is_save_when_scanning;
 
 	QStringList allFileNames;
 };

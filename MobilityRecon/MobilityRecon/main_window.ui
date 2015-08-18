@@ -44,6 +44,7 @@
     </property>
     <addaction name="actionScanByKinect2"/>
     <addaction name="actionStopScan"/>
+    <addaction name="actionSaveWhenScanning"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuTools"/>
@@ -112,6 +113,9 @@
    </property>
   </action>
   <action name="actionScanByKinect2">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="main_window.qrc">
      <normaloff>:/MainWindow/Resources/kinect.png</normaloff>:/MainWindow/Resources/kinect.png</iconset>
@@ -127,6 +131,14 @@
    </property>
    <property name="text">
     <string>Stop Scan</string>
+   </property>
+  </action>
+  <action name="actionSaveWhenScanning">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Save When Scanning</string>
    </property>
   </action>
  </widget>

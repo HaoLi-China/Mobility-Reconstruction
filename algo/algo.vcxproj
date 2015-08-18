@@ -168,11 +168,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="point_set_normal_estimation.cpp" />
     <ClCompile Include="point_set_simplification.cpp" />
     <ClCompile Include="poisson_reconstruction.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="algo_common.h" />
+    <ClInclude Include="point_set_normal_estimation.h" />
     <ClInclude Include="point_set_simplification.h" />
     <ClInclude Include="poisson_reconstruction.h" />
   </ItemGroup>
