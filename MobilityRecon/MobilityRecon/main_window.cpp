@@ -420,13 +420,24 @@ void MainWindow::export_sequential_snapshots(){
 
 	for (int i = 0; i < allFileNames.size(); i++){
 		removeAllObjects();
-		doOpen(allFileNames[i]);
+		doOpen(allFileNames[i],false);
 		canvas()->snapshotScreen(path + "/" + QString::number(i, 10) + ".jpg");
 	}
 }
 
 //HaoLi:scan by kinect2
 void MainWindow::scan_by_kinect2(){
+	if (is_save_when_scanning){
+		QDir dir("scan");
+		QFileInfoList file_list = dir.entryInfoList(QDir::Files);
+
+		for (int i = 0; i < file_list.size(); ++i) {
+			QFileInfo fileInfo = file_list.at(i);
+			QFile::remove("scan/" + fileInfo.fileName());
+		}
+	}
+
+	cdepthbasic()->openScanner();
 	scanthread->start();
 }
 
@@ -472,23 +483,16 @@ void MainWindow::doScan(int count){
 
 //HaoLi:stop scan
 void MainWindow::stopScan(){
+	cdepthbasic()->closeScanner();
 	scanthread->stopScan();
-	computeNormalForEachFrame();
+	if (is_save_when_scanning){
+		computeNormalForEachFrame();
+	}
 }
 
 //HaoLi:set saving flag when scanning
 void MainWindow::set_save_when_scan_flag(bool flag){
 	is_save_when_scanning = flag;
-
-	if (flag){
-		QDir dir("scan");
-		QFileInfoList file_list = dir.entryInfoList(QDir::Files);
-
-		for (int i = 0; i < file_list.size(); ++i) {
-			QFileInfo fileInfo = file_list.at(i);
-			QFile::remove("scan/" + fileInfo.fileName());
-		}
-	}
 }
 
 //HaoLi:saveData
@@ -500,7 +504,6 @@ bool MainWindow::doSave(Object* obj, std::string filename){
 	}
 	else if (dynamic_cast<PointSet*>(obj)) {
 		PointSet* pset = dynamic_cast<PointSet*>(obj);
-		//PointSetNormalEstimation::apply(pset, false, 50);
 		bo = PointSetSerializer_ply::save(filename, pset);
 	}
 

@@ -22,8 +22,6 @@ CDepthBasics::CDepthBasics() :
     {
         m_fFreq = double(qpf.QuadPart);
     }
-
-	InitializeDefaultSensor();
 }
   
 
@@ -35,11 +33,29 @@ CDepthBasics::~CDepthBasics()
 	//release m_pDepthFrameReader
 	SafeRelease(m_pDepthFrameReader);
 
-    // close the Kinect Sensor
-    if (m_pKinectSensor)
-    {
-        m_pKinectSensor->Close();
-    }
+	// close the Kinect Sensor
+	if (m_pKinectSensor)
+	{
+		m_pKinectSensor->Close();
+	}
+
+	//release m_pKinectSensor
+	SafeRelease(m_pKinectSensor);
+}
+
+void CDepthBasics::openScanner(){
+	InitializeDefaultSensor();
+}
+
+void CDepthBasics::closeScanner(){
+	//release m_pDepthFrameReader
+	SafeRelease(m_pDepthFrameReader);
+
+	// close the Kinect Sensor
+	if (m_pKinectSensor)
+	{
+		m_pKinectSensor->Close();
+	}
 
 	//release m_pKinectSensor
 	SafeRelease(m_pKinectSensor);

@@ -17,6 +17,9 @@ public:
 	CDepthBasics();
 	~CDepthBasics();
 
+	void openScanner();
+	void closeScanner();
+
 	//get points of one frame
 	void GetPointsOfOneFrame(PointSet* pointSet);
 
