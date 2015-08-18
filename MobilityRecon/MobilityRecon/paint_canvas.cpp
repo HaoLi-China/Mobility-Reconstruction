@@ -37,6 +37,7 @@ PaintCanvas::PaintCanvas(QWidget* parent, QGLFormat format, CanvasType type /*= 
 	}
 
 	camera()->lookAt(sceneCenter());
+	//camera()->lookAt(qglviewer::Vec(0, 0, 1));
 	camera()->setType(qglviewer::Camera::PERSPECTIVE);
 	camera()->showEntireScene();
 }
@@ -77,7 +78,9 @@ void PaintCanvas::init()
 	// sceneRadius() is not clipped).
 	camera()->setZClippingCoefficient(std::sqrt(3.0f));
 
-	camera()->setViewDirection(qglviewer::Vec(0.0, 1.0, 0.0));
+	//camera()->setViewDirection(qglviewer::Vec(0.0, 1.0, 0.0));
+	camera()->setViewDirection(qglviewer::Vec(0.0, 0.0, 1.0));
+	//camera()->setViewDirection(qglviewer::Vec(1.0, 0.0, 0.0));
 	camera()->setType(qglviewer::Camera::PERSPECTIVE);
 	showEntireScene();
 
@@ -161,7 +164,7 @@ void PaintCanvas::draw()
 		drawCornerAxis();
 
 	//////////////////////////////////////////////////////////////////////////
-
+	
 	objects_manager_->draw();
 }
 

@@ -117,8 +117,7 @@ bool PointSetIO::save(const std::string& file_name, const PointSet* point_set) {
 	return true;
 }
 
-
-
+//HaoLi:load_xyz by its scheme 
 void PointSetIO::load_xyz(PointSet* pointSet, const std::string& file_name) {
 
 	int cols = get_file_cols(file_name);
@@ -176,6 +175,7 @@ void PointSetIO::load_xyz(PointSet* pointSet, const std::string& file_name) {
 	}
 }
 
+//HaoLi:get file columns
 int PointSetIO::get_file_cols(const std::string& file_name){
 	std::ifstream infile(file_name.c_str());
 	infile >> std::noskipws;

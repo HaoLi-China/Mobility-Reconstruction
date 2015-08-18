@@ -7,19 +7,21 @@
 
 #include "main_window.h"
 #include "paint_canvas.h"
+#include "scan_thread.h"
 
 #include "../../basic/file_utils.h"
 #include "../../geom/map.h"
 #include "../../geom/point_set.h"
 #include "../../file_io/map_io.h"
 #include "../../file_io/point_set_io.h"
+#include "../../kinect_io/depth_basic.h"
 
 MainWindow::MainWindow(QWidget *parent)
-: QMainWindow(parent)
-, curDataDirectory_(".")
-, auto_focus_(false)
-, selected_only_(false)
-, highlighting_(false)
+	: QMainWindow(parent)
+	, curDataDirectory_(".")
+	, auto_focus_(false)
+	, selected_only_(false)
+	, highlighting_(false)
 {
 	ui.setupUi(this);
 
@@ -74,11 +76,14 @@ MainWindow::MainWindow(QWidget *parent)
 
 	setCentralWidget(mainSplitter);
 
+	depthbc = new CDepthBasics();
+	scanthread = new ScanThread(this);
 
 	/////////////////////////////////////////////////////////////////////
 	//createMenus();
 	createActions();
 	connect(seqSlider, SIGNAL(valueChanged(int)), this, SLOT(ChangeFrame(int)));
+	connect(scanthread, SIGNAL(doScanSig(int)), this, SLOT(doScan(int)));
 
 	setWindowState(Qt::WindowMaximized);
 	setFocusPolicy(Qt::StrongFocus);
@@ -152,6 +157,8 @@ void MainWindow::createActionsForFileMenu() {
 	connect(ui.actionSnapshot, SIGNAL(triggered()), this, SLOT(snapshot()));
 	connect(ui.actionExit, SIGNAL(triggered()), this, SLOT(close()));
 	connect(ui.actionExportSequentialSnapshots, SIGNAL(triggered()), this, SLOT(export_sequential_snapshots()));
+	connect(ui.actionScanByKinect2, SIGNAL(triggered()), this, SLOT(scan_by_kinect2()));
+	connect(ui.actionStopScan, SIGNAL(triggered()), this, SLOT(stopScan()));
 
 	ui.actionExit->setShortcut(QString("Ctrl+Q"));
 }
@@ -185,7 +192,7 @@ bool MainWindow::import()
 
 	allFileNames.clear();
 	removeAllObjects();
-	
+
 	allFileNames = QFileDialog::getOpenFileNames(this,
 		tr("Import file"), curDataDirectory_,
 		tr("Supported format (*.ply *.obj *.eobj *.off *.stl *.ply2 *.xyz *.bxyz *.pn *.bpn *.pnc *.bpnc *.mesh *.meshb *.tet)\n"
@@ -196,13 +203,13 @@ bool MainWindow::import()
 
 	if (allFileNames.isEmpty())
 		return false;
-	
+
 	seqSlider->setMaximum(allFileNames.size() - 1);
 	seqSlider->setValue(0);
 	return doOpen(allFileNames[0]);
 }
 
-bool MainWindow::doOpen(const QString &fileName)
+bool MainWindow::doOpen(const QString &fileName, bool fit)
 {
 	if (curFileName_ == fileName)
 		return false;
@@ -226,7 +233,7 @@ bool MainWindow::doOpen(const QString &fileName)
 
 	if (obj) {
 		obj->set_name(fileName.toStdString());
-		addObject(obj, true, true);
+		addObject(obj, true, fit);
 
 		//updateStatusBar();
 
@@ -321,7 +328,7 @@ void MainWindow::showAllObjects() {
 	}
 }
 
-//remove all objects
+//HaoLi:remove all objects
 void MainWindow::removeAllObjects() {
 	const std::vector<Object*>& objects = canvas()->objectsManager()->objects();
 	for (int i = 0; i < objects.size(); ++i) {
@@ -384,18 +391,18 @@ void MainWindow::activateObject(const Object* obj, bool fit) {
 	//updateStatusBar();
 }
 
-// change depth frame
+//HaoLi:change depth frame
 void MainWindow::ChangeFrame(int index){
 	removeAllObjects();
-	doOpen(allFileNames[index]);
+	doOpen(allFileNames[index], false);
 }
 
-//save snap shot
+//HaoLi:save snap shot
 void MainWindow::snapshot(){
 	canvas()->snapshotScreen();
 }
 
-//export sequential snapshots
+//HaoLi:export sequential snapshots
 void MainWindow::export_sequential_snapshots(){
 	seqSlider->setVisible(false);
 
@@ -403,7 +410,7 @@ void MainWindow::export_sequential_snapshots(){
 		tr("Export Sequential Snapshots"),
 		curDataDirectory_);
 
-	if(path.isEmpty()){
+	if (path.isEmpty()){
 		return;
 	}
 
@@ -412,4 +419,45 @@ void MainWindow::export_sequential_snapshots(){
 		doOpen(allFileNames[i]);
 		canvas()->snapshotScreen(path + "/" + QString::number(i, 10) + ".jpg");
 	}
+}
+
+//HaoLi:scan by kinect2
+void MainWindow::scan_by_kinect2(){
+	scanthread->start();
+}
+
+//HaoLi:scanning
+void MainWindow::doScan(int count){
+	PointSet* pointSet = new PointSet;
+	cdepthbasic()->GetPointsOfOneFrame(pointSet);
+	//printf("points num:%d\n", pointSet->size_of_vertices());
+
+	Object* obj = nil;
+
+	if (pointSet->size_of_vertices() > 100){
+		obj = pointSet;
+	}
+
+	if (obj) {
+		removeAllObjects();
+
+		if (count == 0){
+
+			qglviewer::Vec vmin(-2.5f, -2.5f, 0.5f);
+			qglviewer::Vec vmax(2.5f, 2.5f, 5.5f);
+			canvas()->setSceneBoundingBox(vmin, vmax);
+			canvas()->showEntireScene();
+		}
+		addObject(obj, true, false);
+
+		status_message("scanning", 500);
+	}
+	else {
+		status_message("Failed", 500);
+	}
+}
+
+//HaoLi:stop scan
+void MainWindow::stopScan(){
+	scanthread->stopScan();
 }

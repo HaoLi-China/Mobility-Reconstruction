@@ -15,6 +15,8 @@ class Map;
 class Object;
 class PointSet;
 class QSplitter;
+class CDepthBasics;
+class ScanThread;
 
 class MainWindow
 	: public QMainWindow
@@ -28,6 +30,7 @@ public:
 	~MainWindow();
 
 	PaintCanvas* canvas() { return mainCanvas_; }
+	CDepthBasics* cdepthbasic() { return depthbc; }
 	//////////////////////////////////////////////////////////////
 
 	virtual void out_message(const std::string& msg);
@@ -52,9 +55,12 @@ public:
 	bool import();
 	void snapshot();
 	void export_sequential_snapshots();
+	void scan_by_kinect2();
 	//bool save();
 
 	void ChangeFrame(int index);
+	void doScan(int count);
+	void stopScan();
 
 
 private:
@@ -62,7 +68,7 @@ private:
 	void createActions();
 	void createActionsForFileMenu();
 
-	bool doOpen(const QString &fileName);
+	bool doOpen(const QString &fileName, bool fit = true);
 
 	void setCurrentFile(const QString &fileName);
 
@@ -81,6 +87,9 @@ private:
 	PaintCanvas* mainCanvas_;
 	PaintCanvas* secondCanvas_;
 	PaintCanvas* thirdCanvas_;
+
+	CDepthBasics* depthbc;
+	ScanThread* scanthread;
 
 	QStringList		recentFiles_;
 	QString			curFileName_;

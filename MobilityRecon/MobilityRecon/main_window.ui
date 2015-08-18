@@ -14,8 +14,8 @@
    <string>MobilityRecon</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>Resources/Cute-Ball-Favorites-icon.png</normaloff>Resources/Cute-Ball-Favorites-icon.png</iconset>
+   <iconset resource="main_window.qrc">
+    <normaloff>:/MainWindow/Resources/Cute-Ball-Favorites-icon.png</normaloff>:/MainWindow/Resources/Cute-Ball-Favorites-icon.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget"/>
   <widget class="QMenuBar" name="menuBar">
@@ -38,7 +38,15 @@
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
+   <widget class="QMenu" name="menuTools">
+    <property name="title">
+     <string>Tools</string>
+    </property>
+    <addaction name="actionScanByKinect2"/>
+    <addaction name="actionStopScan"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuTools"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -51,6 +59,9 @@
    <addaction name="actionImport"/>
    <addaction name="actionSnapshot"/>
    <addaction name="actionExportSequentialSnapshots"/>
+   <addaction name="separator"/>
+   <addaction name="actionScanByKinect2"/>
+   <addaction name="actionStopScan"/>
    <addaction name="separator"/>
    <addaction name="actionExit"/>
   </widget>
@@ -88,7 +99,7 @@
      <normaloff>:/MainWindow/Resources/snap_shot.png</normaloff>:/MainWindow/Resources/snap_shot.png</iconset>
    </property>
    <property name="text">
-    <string>Snap shot</string>
+    <string>Snapshot</string>
    </property>
   </action>
   <action name="actionExportSequentialSnapshots">
@@ -98,6 +109,24 @@
    </property>
    <property name="text">
     <string>Export Sequential Snapshots</string>
+   </property>
+  </action>
+  <action name="actionScanByKinect2">
+   <property name="icon">
+    <iconset resource="main_window.qrc">
+     <normaloff>:/MainWindow/Resources/kinect.png</normaloff>:/MainWindow/Resources/kinect.png</iconset>
+   </property>
+   <property name="text">
+    <string>Scan By Kinect2</string>
+   </property>
+  </action>
+  <action name="actionStopScan">
+   <property name="icon">
+    <iconset resource="main_window.qrc">
+     <normaloff>:/MainWindow/Resources/stopscan.png</normaloff>:/MainWindow/Resources/stopscan.png</iconset>
+   </property>
+   <property name="text">
+    <string>Stop Scan</string>
    </property>
   </action>
  </widget>

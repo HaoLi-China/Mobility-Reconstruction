@@ -59,6 +59,15 @@
     <ClCompile Include="paint_canvas.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="scan_thread.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_scan_thread.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_scan_thread.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="main_window.h">
@@ -71,6 +80,9 @@
       <Filter>Resource Files</Filter>
     </CustomBuild>
     <CustomBuild Include="paint_canvas.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="scan_thread.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>

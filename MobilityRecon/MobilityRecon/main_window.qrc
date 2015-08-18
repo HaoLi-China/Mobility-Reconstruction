@@ -7,5 +7,7 @@
 		<file>Resources/fileopen.png</file>
 		<file>Resources/snap_shot.png</file>
 		<file>Resources/export_sequential_snapshots.png</file>
+		<file>Resources/kinect.png</file>
+		<file>Resources/stopscan.png</file>
     </qresource>
 </RCC>
