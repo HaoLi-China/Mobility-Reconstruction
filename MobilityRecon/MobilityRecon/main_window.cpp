@@ -80,13 +80,13 @@ MainWindow::MainWindow(QWidget *parent)
 	setCentralWidget(mainSplitter);
 
 	depthbc = new CDepthBasics();
-	scanthread = new ScanThread(this);
+	scanthread = new ScanThread();
 
 	/////////////////////////////////////////////////////////////////////
 	//createMenus();
 	createActions();
 	connect(seqSlider, SIGNAL(valueChanged(int)), this, SLOT(ChangeFrame(int)));
-	connect(scanthread, SIGNAL(doScanSig(int)), this, SLOT(doScan(int)));
+	connect(scanthread, SIGNAL(doScanSig()), this, SLOT(doScan()));
 
 	setWindowState(Qt::WindowMaximized);
 	setFocusPolicy(Qt::StrongFocus);
@@ -437,12 +437,17 @@ void MainWindow::scan_by_kinect2(){
 		}
 	}
 
+	qglviewer::Vec vmin(-2.5f, -2.5f, 0.5f);
+	qglviewer::Vec vmax(2.5f, 2.5f, 5.5f);
+	canvas()->setSceneBoundingBox(vmin, vmax);
+	canvas()->showEntireScene();
+
 	cdepthbasic()->openScanner();
 	scanthread->start();
 }
 
 //HaoLi:scanning
-void MainWindow::doScan(int count){
+void MainWindow::doScan(){
 	PointSet* pointSet = new PointSet;
 	cdepthbasic()->GetPointsOfOneFrame(pointSet);
 	//printf("points num:%d\n", pointSet->size_of_vertices());
@@ -466,12 +471,6 @@ void MainWindow::doScan(int count){
 			doSave(obj, filename);
 		}
 
-		if (count == 0){
-			qglviewer::Vec vmin(-2.5f, -2.5f, 0.5f);
-			qglviewer::Vec vmax(2.5f, 2.5f, 5.5f);
-			canvas()->setSceneBoundingBox(vmin, vmax);
-			canvas()->showEntireScene();
-		}
 		addObject(obj, true, false);
 
 		status_message("scanning", 500);

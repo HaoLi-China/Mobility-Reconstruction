@@ -6,27 +6,27 @@
 #include "QThread"
 #include "QReadWriteLock"
 
-class MainWindow;
+//class MainWindow;
 
 class ScanThread : public QThread
 {
 	Q_OBJECT
 public:
 	ScanThread();
-	ScanThread(MainWindow* main_window);
+	//ScanThread(MainWindow* main_window);
 	~ScanThread();
 
 	void stopScan();
 
 signals:
-	void doScanSig(int);
+	void doScanSig();
 
 
 protected:
 	void run();
 
 private:
-	MainWindow* main_window;
+	//MainWindow* main_window;
 	bool isStop;
 };
 

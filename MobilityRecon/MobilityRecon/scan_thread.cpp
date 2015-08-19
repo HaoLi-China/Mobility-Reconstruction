@@ -3,18 +3,15 @@
 #include "scan_thread.h"
 #include "main_window.h"
 
-#include "../../geom/point_set.h"
-#include "../../kinect_io/depth_basic.h"
-
 ScanThread::ScanThread(){
-	this->main_window = nil;
+	//this->main_window = nil;
 	isStop = false;
 }
 
-ScanThread::ScanThread(MainWindow* main_window){
-	this->main_window = main_window;
-	isStop = false;
-}
+//ScanThread::ScanThread(MainWindow* main_window){
+//	this->main_window = main_window;
+//	isStop = false;
+//}
 
 ScanThread::~ScanThread(){
 
@@ -26,16 +23,14 @@ void ScanThread::stopScan(){
 
 void ScanThread::run(){
 
-	if (!main_window){
+	/*if (!main_window){
 		return;
-	}
+	}*/
 
 	isStop = false;
 
 	while (!isStop){
-		int count = 0;
-		emit doScanSig(count);
+		emit doScanSig();
 		msleep(20);
-		count++;
 	}
 }

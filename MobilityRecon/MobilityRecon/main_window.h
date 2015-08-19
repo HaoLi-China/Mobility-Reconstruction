@@ -59,7 +59,7 @@ public:
 	//bool save();
 
 	void ChangeFrame(int index);
-	void doScan(int count);
+	void doScan();
 	void stopScan();
 	void set_save_when_scan_flag(bool flag);
 
