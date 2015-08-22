@@ -157,7 +157,7 @@ void CDepthBasics::ProcessDepth(INT64 nTime, const UINT16* pBuffer, int nWidth, 
 
 		if (SUCCEEDED(hr)){
 			// end pixel is start + width*height - 1
-			//const CameraSpacePoint* cspEnd = csp + (nWidth * nHeight);
+			//const CameraSpacePoint* cspEnd = csp + (nWidth * nHeight)£»
 
 			//while (csp < cspEnd)
 			for (int i = 0; i < nWidth * nHeight; i++)

@@ -462,8 +462,7 @@ void MainWindow::doScan(){
 		removeAllObjects();
 
 		if (is_save_when_scanning){
-			time_t nowtime;
-			nowtime = time(NULL); //get current time
+			clock_t nowtime = clock();
 
 			std::stringstream stream;
 			stream << "scan/" << nowtime << ".ply";
