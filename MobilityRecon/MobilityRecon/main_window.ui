@@ -44,6 +44,8 @@
     </property>
     <addaction name="actionScanByKinect2"/>
     <addaction name="actionStopScan"/>
+    <addaction name="actionComputeNormalsForFrames"/>
+    <addaction name="separator"/>
     <addaction name="actionSaveWhenScanning"/>
    </widget>
    <addaction name="menuFile"/>
@@ -63,6 +65,7 @@
    <addaction name="separator"/>
    <addaction name="actionScanByKinect2"/>
    <addaction name="actionStopScan"/>
+   <addaction name="actionComputeNormalsForFrames"/>
    <addaction name="separator"/>
    <addaction name="actionExit"/>
   </widget>
@@ -139,6 +142,15 @@
    </property>
    <property name="text">
     <string>Save When Scanning</string>
+   </property>
+  </action>
+  <action name="actionComputeNormalsForFrames">
+   <property name="icon">
+    <iconset resource="main_window.qrc">
+     <normaloff>:/MainWindow/Resources/normal.png</normaloff>:/MainWindow/Resources/normal.png</iconset>
+   </property>
+   <property name="text">
+    <string>Compute Normals For Frames </string>
    </property>
   </action>
  </widget>

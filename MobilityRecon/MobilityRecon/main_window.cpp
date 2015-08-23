@@ -163,6 +163,7 @@ void MainWindow::createActionsForFileMenu() {
 	connect(ui.actionScanByKinect2, SIGNAL(triggered()), this, SLOT(scan_by_kinect2()));
 	connect(ui.actionStopScan, SIGNAL(triggered()), this, SLOT(stopScan()));
 	connect(ui.actionSaveWhenScanning, SIGNAL(toggled(bool)), this, SLOT(set_save_when_scan_flag(bool)));
+	connect(ui.actionComputeNormalsForFrames, SIGNAL(triggered()), this, SLOT(computeNormalsForFrames()));
 
 	ui.actionExit->setShortcut(QString("Ctrl+Q"));
 }
@@ -427,6 +428,9 @@ void MainWindow::export_sequential_snapshots(){
 
 //HaoLi:scan by kinect2
 void MainWindow::scan_by_kinect2(){
+	seqSlider->setVisible(false);
+	allFileNames.clear();
+
 	if (is_save_when_scanning){
 		QDir dir("scan");
 		QFileInfoList file_list = dir.entryInfoList(QDir::Files);
@@ -481,11 +485,11 @@ void MainWindow::doScan(){
 
 //HaoLi:stop scan
 void MainWindow::stopScan(){
-	cdepthbasic()->closeScanner();
 	scanthread->stopScan();
-	if (is_save_when_scanning){
-		computeNormalForEachFrame();
-	}
+	cdepthbasic()->closeScanner();
+	//if (is_save_when_scanning){
+	//	computeNormalForEachFrame();
+	//}
 }
 
 //HaoLi:set saving flag when scanning
@@ -509,15 +513,31 @@ bool MainWindow::doSave(Object* obj, std::string filename){
 }
 
 //HaoLi:compute normal for each frame
-void  MainWindow::computeNormalForEachFrame(){
-	QDir dir("scan");
-	QFileInfoList file_list = dir.entryInfoList(QDir::Files);
+void  MainWindow::computeNormalsForFrames(){
+	QStringList fileNames = QFileDialog::getOpenFileNames(this,
+		tr("Choose files to read point cloud"), curDataDirectory_,
+		tr("Point set format (*.ply)\n")
+		);
 
-	for (int i = 0; i < file_list.size(); ++i) {
+	if (fileNames.isEmpty())
+		return;
+
+	QString save_path = QFileDialog::getExistingDirectory(this,
+		tr("Choose dir to save point cloud"),
+		curDataDirectory_);
+
+	if (save_path.isEmpty()){
+		return;
+	}
+
+	for (int i = 0; i < fileNames.size(); ++i) {
 		status_message("Processing data, Wating...", 500);
-		QFileInfo fileInfo = file_list.at(i);
-		PointSet* pset = PointSetIO::read(("scan/" + fileInfo.fileName()).toStdString());
+		PointSet* pset = PointSetIO::read((fileNames[i]).toStdString());
 		PointSetNormalEstimation::apply(pset, false, 50);
-		doSave(pset, ("scan/" + fileInfo.fileName()).toStdString());
+		QStringList strlist = (fileNames[i]).split("/");
+		doSave(pset, (save_path + "/" + strlist[strlist.size() - 1]).toStdString());
+
+		delete pset;
+		pset = NULL;
 	}
 }

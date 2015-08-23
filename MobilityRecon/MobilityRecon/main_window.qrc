@@ -9,5 +9,6 @@
 		<file>Resources/export_sequential_snapshots.png</file>
 		<file>Resources/kinect.png</file>
 		<file>Resources/stopscan.png</file>
+		<file>Resources/normal.png</file>
     </qresource>
 </RCC>

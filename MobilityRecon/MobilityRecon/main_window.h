@@ -56,6 +56,7 @@ public:
 	void snapshot();
 	void export_sequential_snapshots();
 	void scan_by_kinect2();
+	void computeNormalsForFrames();
 	//bool save();
 
 	void ChangeFrame(int index);
@@ -80,7 +81,6 @@ private:
 	void removeAllObjects();
 
 	bool doSave(Object* obj, std::string filename);
-	void computeNormalForEachFrame();
 
 private:
 	Ui::MainWindowClass ui;
