@@ -80,7 +80,9 @@ private:
 	void showAllObjects();
 	void removeAllObjects();
 
-	bool doSave(Object* obj, std::string filename);
+	bool doSavePointCloud(Object* obj, std::string filename);
+	bool MainWindow::doSaveDepthImage(ushort *depth_data, int depth_width, int depth_height, std::string filename);
+	bool MainWindow::doSaveRGBImage(vecng<3, uchar> *rgb_data, int rgb_width, int rgb_height, std::string filename);
 
 private:
 	Ui::MainWindowClass ui;

@@ -432,12 +432,28 @@ void MainWindow::scan_by_kinect2(){
 	allFileNames.clear();
 
 	if (is_save_when_scanning){
-		QDir dir("scan");
-		QFileInfoList file_list = dir.entryInfoList(QDir::Files);
+		QDir dir1("scan/depth_image");
+		QFileInfoList file_list1 = dir1.entryInfoList(QDir::Files);
 
-		for (int i = 0; i < file_list.size(); ++i) {
-			QFileInfo fileInfo = file_list.at(i);
-			QFile::remove("scan/" + fileInfo.fileName());
+		for (int i = 0; i < file_list1.size(); ++i) {
+			QFileInfo fileInfo = file_list1.at(i);
+			QFile::remove("scan/depth_image/" + fileInfo.fileName());
+		}
+
+		QDir dir2("scan/rgb_image");
+		QFileInfoList file_list2 = dir2.entryInfoList(QDir::Files);
+
+		for (int i = 0; i < file_list2.size(); ++i) {
+			QFileInfo fileInfo = file_list2.at(i);
+			QFile::remove("scan/rgb_image/" + fileInfo.fileName());
+		}
+
+		QDir dir3("scan/point_cloud");
+		QFileInfoList file_list3 = dir3.entryInfoList(QDir::Files);
+
+		for (int i = 0; i < file_list3.size(); ++i) {
+			QFileInfo fileInfo = file_list3.at(i);
+			QFile::remove("scan/point_cloud/" + fileInfo.fileName());
 		}
 	}
 
@@ -453,34 +469,58 @@ void MainWindow::scan_by_kinect2(){
 //HaoLi:scanning
 void MainWindow::doScan(){
 	PointSet* pointSet = new PointSet;
-	cdepthbasic()->GetPointsOfOneFrame(pointSet);
+	ushort *depth_data = new ushort[512 * 424];
+	vecng<3, uchar> *rgb_data = new vecng<3, uchar>[1920 * 1080];
+	
+	//cdepthbasic()->GetPointsOfOneFrame(pointSet);
+	bool isSucceed = cdepthbasic()->GetDataOfOneFrame(pointSet, depth_data, rgb_data);
+	
 	//printf("points num:%d\n", pointSet->size_of_vertices());
 
-	Object* obj = nil;
+	if (isSucceed){
+		Object* obj = nil;
 
-	if (pointSet->size_of_vertices() > 100){
-		obj = pointSet;
-	}
-
-	if (obj) {
-		removeAllObjects();
-
-		if (is_save_when_scanning){
-			clock_t nowtime = clock();
-
-			std::stringstream stream;
-			stream << "scan/" << nowtime << ".ply";
-			std::string filename = stream.str();
-			doSave(obj, filename);
+		if (pointSet->size_of_vertices() > 100){
+			obj = pointSet;
 		}
 
-		addObject(obj, true, false);
+		if (obj) {
+			removeAllObjects();
 
-		status_message("scanning", 500);
+			if (is_save_when_scanning){
+				clock_t nowtime = clock();
+
+				std::stringstream stream1;
+				stream1 << "scan/" << "point_cloud/" << nowtime << ".ply";
+				std::string pcfilename = stream1.str();
+
+				std::stringstream stream2;
+				stream2 << "scan/" << "depth_image/" << nowtime << ".depth";
+				std::string depthfilename = stream2.str();
+
+				std::stringstream stream3;
+				stream3 << "scan/" << "rgb_image/" << nowtime << ".rgb";
+				std::string rgbfilename = stream3.str();
+
+				//doSavePointCloud(obj, pcfilename);
+				doSaveDepthImage(depth_data, 512 , 424, depthfilename);
+				doSaveRGBImage(rgb_data, 1920, 1080, rgbfilename);
+			}
+
+			addObject(obj, true, false);
+
+			status_message("scanning", 500);
+		}
+		else {
+			status_message("Failed", 500);
+		}
 	}
 	else {
 		status_message("Failed", 500);
 	}
+
+	delete[]rgb_data;
+	delete[]depth_data;
 }
 
 //HaoLi:stop scan
@@ -497,8 +537,8 @@ void MainWindow::set_save_when_scan_flag(bool flag){
 	is_save_when_scanning = flag;
 }
 
-//HaoLi:saveData
-bool MainWindow::doSave(Object* obj, std::string filename){
+//HaoLi:savePointCloud
+bool MainWindow::doSavePointCloud(Object* obj, std::string filename){
 	bool bo;
 	if (dynamic_cast<Map*>(obj)) {
 		Map* map = dynamic_cast<Map*>(obj);
@@ -510,6 +550,41 @@ bool MainWindow::doSave(Object* obj, std::string filename){
 	}
 
 	return bo;
+}
+
+//HaoLi:saveDepthImage
+bool MainWindow::doSaveDepthImage(ushort *depth_data, int depth_width, int depth_height, std::string filename){
+	std::ofstream ofs(filename, std::ios::binary);
+	ofs << depth_width << "\n";
+	ofs << depth_height << "\n";
+
+	/*for (int i = 0; i < depth_width*depth_height; i++){
+		ofs << depth_data[i] << "\n";
+	}*/
+	ofs.write((char*)depth_data, depth_width*depth_height*sizeof(ushort));
+
+	ofs.close();
+
+	return true;
+}
+
+//HaoLi:saveRGBImage
+bool MainWindow::doSaveRGBImage(vecng<3, uchar> *rgb_data, int rgb_width, int rgb_height, std::string filename){
+	std::ofstream ofs(filename, std::ios::binary);
+	ofs << rgb_width << "\n";
+	ofs << rgb_height << "\n";
+
+	ofs.write((char*)rgb_data, rgb_width*rgb_height*sizeof(vecng<3, uchar>));
+	
+	/*for (int i = 0; i < rgb_width; i += 3){
+		for (int j = 0; j < rgb_height; j += 3){
+		ofs << rgb[i * 640 + j].x << " " << rgb[i * 640 + j].y << " " << rgb[i * 640 + j].z << "\n";
+		}
+		}*/
+
+	ofs.close();
+
+	return true;
 }
 
 //HaoLi:compute normal for each frame
@@ -535,7 +610,7 @@ void  MainWindow::computeNormalsForFrames(){
 		PointSet* pset = PointSetIO::read((fileNames[i]).toStdString());
 		PointSetNormalEstimation::apply(pset, false, 50);
 		QStringList strlist = (fileNames[i]).split("/");
-		doSave(pset, (save_path + "/" + strlist[strlist.size() - 1]).toStdString());
+		doSavePointCloud(pset, (save_path + "/" + strlist[strlist.size() - 1]).toStdString());
 
 		delete pset;
 		pset = NULL;
