@@ -17,6 +17,7 @@
 #include "../../file_io/point_set_serializer_ply.h"
 #include "../../kinect_io/depth_basic.h"
 #include "../../algo/point_set_normal_estimation.h"
+#include "../../image/my_image.h"
 
 MainWindow::MainWindow(QWidget *parent)
 	: QMainWindow(parent)
@@ -470,7 +471,8 @@ void MainWindow::scan_by_kinect2(){
 void MainWindow::doScan(){
 	PointSet* pointSet = new PointSet;
 	ushort *depth_data = new ushort[512 * 424];
-	vecng<3, uchar> *rgb_data = new vecng<3, uchar>[1920 * 1080];
+	uchar *rgb_data = new uchar[1920 * 1080 * 4];
+	uchar *rgb_resize_data = new uchar[640 * 360 * 4];
 	
 	//cdepthbasic()->GetPointsOfOneFrame(pointSet);
 	bool isSucceed = cdepthbasic()->GetDataOfOneFrame(pointSet, depth_data, rgb_data);
@@ -504,7 +506,10 @@ void MainWindow::doScan(){
 
 				//doSavePointCloud(obj, pcfilename);
 				doSaveDepthImage(depth_data, 512 , 424, depthfilename);
-				doSaveRGBImage(rgb_data, 1920, 1080, rgbfilename);
+
+				MyImage mi;
+				mi.image_resize(rgb_data, 1920, 1080, rgb_resize_data, 640, 360);
+				doSaveRGBImage(rgb_resize_data, 640, 360, rgbfilename);
 			}
 
 			addObject(obj, true, false);
@@ -520,7 +525,6 @@ void MainWindow::doScan(){
 	}
 
 	delete[]rgb_data;
-	delete[]depth_data;
 }
 
 //HaoLi:stop scan
@@ -554,35 +558,18 @@ bool MainWindow::doSavePointCloud(Object* obj, std::string filename){
 
 //HaoLi:saveDepthImage
 bool MainWindow::doSaveDepthImage(ushort *depth_data, int depth_width, int depth_height, std::string filename){
-	std::ofstream ofs(filename, std::ios::binary);
-	ofs << depth_width << "\n";
-	ofs << depth_height << "\n";
-
-	/*for (int i = 0; i < depth_width*depth_height; i++){
-		ofs << depth_data[i] << "\n";
-	}*/
-	ofs.write((char*)depth_data, depth_width*depth_height*sizeof(ushort));
-
-	ofs.close();
+	SaveDepthThread *sdt = new SaveDepthThread(depth_data, depth_width, depth_height, filename);
+	connect(sdt, SIGNAL(releaseSelf(SaveDepthThread*)), this, SLOT(releaseDepthThread(SaveDepthThread*)));
+	sdt->start();
 
 	return true;
 }
 
 //HaoLi:saveRGBImage
-bool MainWindow::doSaveRGBImage(vecng<3, uchar> *rgb_data, int rgb_width, int rgb_height, std::string filename){
-	std::ofstream ofs(filename, std::ios::binary);
-	ofs << rgb_width << "\n";
-	ofs << rgb_height << "\n";
-
-	ofs.write((char*)rgb_data, rgb_width*rgb_height*sizeof(vecng<3, uchar>));
-	
-	/*for (int i = 0; i < rgb_width; i += 3){
-		for (int j = 0; j < rgb_height; j += 3){
-		ofs << rgb[i * 640 + j].x << " " << rgb[i * 640 + j].y << " " << rgb[i * 640 + j].z << "\n";
-		}
-		}*/
-
-	ofs.close();
+bool MainWindow::doSaveRGBImage(uchar *rgb_data, int rgb_width, int rgb_height, std::string filename){
+	SaveRGBThread *srgbt = new SaveRGBThread(rgb_data, rgb_width, rgb_height, filename);
+	connect(srgbt, SIGNAL(releaseSelf(SaveRGBThread*)), this, SLOT(releaseRGBThread(SaveRGBThread*)));
+	srgbt->start();
 
 	return true;
 }
@@ -615,4 +602,16 @@ void  MainWindow::computeNormalsForFrames(){
 		delete pset;
 		pset = NULL;
 	}
+}
+
+//HaoLi:release saveDepthThread
+void  MainWindow::releaseDepthThread(SaveDepthThread* sdt){
+	std::cout << sdt->filename << std::endl;
+	delete sdt;
+}
+
+//HaoLi:release saveRGBThread
+void  MainWindow::releaseRGBThread(SaveRGBThread* srgbt){
+	std::cout << srgbt->filename << std::endl;
+	delete srgbt;
 }

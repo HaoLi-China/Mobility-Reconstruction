@@ -288,6 +288,9 @@
     <ProjectReference Include="..\..\geom\geom.vcxproj">
       <Project>{206aec20-3f2a-42c8-a0d7-20407748ffad}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\image\image.vcxproj">
+      <Project>{715278a4-b2ff-4ae1-91fd-e6175f6b2a89}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\kinect_io\kinect_io.vcxproj">
       <Project>{9226937b-b147-4c50-ae54-bd538699ba2d}</Project>
     </ProjectReference>

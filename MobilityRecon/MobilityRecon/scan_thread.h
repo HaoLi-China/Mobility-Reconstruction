@@ -30,4 +30,44 @@ private:
 	bool isStop;
 };
 
+class SaveRGBThread : public QThread
+{
+	Q_OBJECT
+public:
+	SaveRGBThread(uchar *rgb_data, int rgb_width, int rgb_height, std::string filename);
+	SaveRGBThread();
+	~SaveRGBThread();
+signals:
+	void releaseSelf(SaveRGBThread *srgbt);
+
+protected:
+	void run();
+
+public:
+	uchar *rgb_data;
+	int rgb_width;
+	int rgb_height;
+	std::string filename;
+};
+
+class SaveDepthThread : public QThread
+{
+	Q_OBJECT
+public:
+	SaveDepthThread(ushort *depth_data, int depth_width, int depth_height, std::string filename);
+	SaveDepthThread();
+	~SaveDepthThread();
+signals:
+	void releaseSelf(SaveDepthThread *sdt);
+
+protected:
+	void run();
+
+public:
+	ushort *depth_data;
+	int depth_width;
+	int depth_height;
+	std::string filename;
+};
+
 #endif
