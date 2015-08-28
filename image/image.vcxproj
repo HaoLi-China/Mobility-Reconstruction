@@ -158,6 +158,7 @@
     <ClCompile Include="image_serializer_ppm.cpp" />
     <ClCompile Include="image_serializer_xpm.cpp" />
     <ClCompile Include="image_store.cpp" />
+    <ClCompile Include="my_image.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="color.h" />
@@ -170,6 +171,7 @@
     <ClInclude Include="image_serializer_ppm.h" />
     <ClInclude Include="image_serializer_xpm.h" />
     <ClInclude Include="image_store.h" />
+    <ClInclude Include="my_image.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

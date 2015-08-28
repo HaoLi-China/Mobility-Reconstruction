@@ -7,6 +7,7 @@
 // Kinect Header files
 #include <Kinect.h>
 
+#include "../math/vecg.h"
 #include "kinect_io_common.h"
 
 class PointSet;
@@ -21,15 +22,27 @@ public:
 	void closeScanner();
 
 	//get points of one frame
-	void GetPointsOfOneFrame(PointSet* pointSet);
+	bool GetPointsOfOneFrame(PointSet* pointSet);
+
+	//get depth image, rgb image and point cloud of one frame
+	bool GetDataOfOneFrame(PointSet* pointSet, UINT16* depth_data, unsigned char *rgb);
+
+	int getDepthWidth();
+	int getDepthHeight();
+	int getRGBWidth();
+	int getRGBHeight();
 
 private:
-	INT64                   m_nStartTime;
-	INT64                   m_nLastCounter;
-	double                  m_fFreq;
-	INT64                   m_nNextStatusTime;
-	DWORD                   m_nFramesSinceUpdate;
-	bool                    m_bSaveScreenshot;
+	//Depth image resolution
+	int depth_width;
+	int depth_height;
+
+	//RGB image resolution
+	int rgb_width;
+	int rgb_height;
+
+	USHORT nDepthMinReliableDistance;
+	USHORT nDepthMaxDistance;
 
 	// Current Kinect
 	IKinectSensor*          m_pKinectSensor;
@@ -37,24 +50,18 @@ private:
 	// Depth reader
 	IDepthFrameReader*      m_pDepthFrameReader;
 
+	// color reader
+	IColorFrameReader*      m_pColorFrameReader;
+
 	ICoordinateMapper*      pCoordinateMapper;
+
+	RGBQUAD* m_pColorRGBX;
 
 	/// <summary>
 	/// Initializes the default Kinect sensor
 	/// </summary>
 	/// <returns>S_OK on success, otherwise failure code</returns>
 	HRESULT                 InitializeDefaultSensor();
-
-	/// <summary>
-	/// Handle new depth data
-	/// <param name="nTime">timestamp of frame</param>
-	/// <param name="pBuffer">pointer to frame data</param>
-	/// <param name="nWidth">width (in pixels) of input image data</param>
-	/// <param name="nHeight">height (in pixels) of input image data</param>
-	/// <param name="nMinDepth">minimum reliable depth</param>
-	/// <param name="nMaxDepth">maximum reliable depth</param>
-	/// </summary>
-	void                    ProcessDepth(INT64 nTime, const UINT16* pBuffer, int nHeight, int nWidth, USHORT nMinDepth, USHORT nMaxDepth, PointSet* pointSet);
 
 	// Safe release for interfaces
 	template<class Interface>

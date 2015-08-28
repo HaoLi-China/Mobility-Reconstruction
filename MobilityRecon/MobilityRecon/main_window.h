@@ -17,6 +17,8 @@ class PointSet;
 class QSplitter;
 class CDepthBasics;
 class ScanThread;
+class SaveDepthThread;
+class SaveRGBThread;
 
 class MainWindow
 	: public QMainWindow
@@ -63,6 +65,8 @@ public:
 	void doScan();
 	void stopScan();
 	void set_save_when_scan_flag(bool flag);
+	void releaseDepthThread(SaveDepthThread* sdt);
+	void releaseRGBThread(SaveRGBThread* srgbt);
 
 
 private:
@@ -82,7 +86,7 @@ private:
 
 	bool doSavePointCloud(Object* obj, std::string filename);
 	bool MainWindow::doSaveDepthImage(ushort *depth_data, int depth_width, int depth_height, std::string filename);
-	bool MainWindow::doSaveRGBImage(vecng<3, uchar> *rgb_data, int rgb_width, int rgb_height, std::string filename);
+	bool MainWindow::doSaveRGBImage(uchar *rgb_data, int rgb_width, int rgb_height, std::string filename);
 
 private:
 	Ui::MainWindowClass ui;

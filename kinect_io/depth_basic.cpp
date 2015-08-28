@@ -8,22 +8,19 @@
 /// Constructor
 /// </summary>
 CDepthBasics::CDepthBasics() :
-    m_nStartTime(0),
-    m_nLastCounter(0),
-    m_nFramesSinceUpdate(0),
-    m_fFreq(0),
-    m_nNextStatusTime(0LL),
-    m_bSaveScreenshot(false),
-    m_pKinectSensor(NULL),
-	m_pDepthFrameReader(NULL)
+depth_width(512),
+depth_height(424),
+rgb_width(1920),
+rgb_height(1080),
+nDepthMinReliableDistance(500),
+nDepthMaxDistance(USHRT_MAX),
+m_pKinectSensor(NULL),
+m_pDepthFrameReader(NULL)
 {
-    LARGE_INTEGER qpf = {0};
-    if (QueryPerformanceFrequency(&qpf))
-    {
-        m_fFreq = double(qpf.QuadPart);
-    }
+	// create heap storage for color pixel data in RGBX format
+	m_pColorRGBX = new RGBQUAD[rgb_width * rgb_height];
 }
-  
+
 
 /// <summary>
 /// Destructor
@@ -41,6 +38,12 @@ CDepthBasics::~CDepthBasics()
 
 	//release m_pKinectSensor
 	SafeRelease(m_pKinectSensor);
+
+	if (m_pColorRGBX)
+	{
+		delete[] m_pColorRGBX;
+		m_pColorRGBX = NULL;
+	}
 }
 
 void CDepthBasics::openScanner(){
@@ -80,6 +83,7 @@ HRESULT CDepthBasics::InitializeDefaultSensor()
 	{
 		// Initialize the Kinect and get the depth reader
 		IDepthFrameSource* pDepthFrameSource = NULL;
+		IColorFrameSource* pColorFrameSource = NULL;
 
 		hr = m_pKinectSensor->Open();
 
@@ -94,6 +98,13 @@ HRESULT CDepthBasics::InitializeDefaultSensor()
 			hr = pDepthFrameSource->OpenReader(&m_pDepthFrameReader);
 		}
 
+		if (SUCCEEDED(hr))
+			hr = m_pKinectSensor->get_ColorFrameSource(&pColorFrameSource);
+
+		if (SUCCEEDED(hr))
+			hr = pColorFrameSource->OpenReader(&m_pColorFrameReader);
+
+		SafeRelease(pColorFrameSource);
 		SafeRelease(pDepthFrameSource);
 	}
 
@@ -107,80 +118,13 @@ HRESULT CDepthBasics::InitializeDefaultSensor()
 }
 
 /// <summary>
-/// Handle new depth data
-/// <param name="nTime">timestamp of frame</param>
-/// <param name="pBuffer">pointer to frame data</param>
-/// <param name="nWidth">width (in pixels) of input image data</param>
-/// <param name="nHeight">height (in pixels) of input image data</param>
-/// <param name="nMinDepth">minimum reliable depth</param>
-/// <param name="nMaxDepth">maximum reliable depth</param>
-/// </summary>
-void CDepthBasics::ProcessDepth(INT64 nTime, const UINT16* pBuffer, int nWidth, int nHeight, USHORT nMinDepth, USHORT nMaxDepth, PointSet* pointSet)
-{
-	if (!m_nStartTime)
-	{
-		m_nStartTime = nTime;
-	}
-
-	double fps = 0.0;
-
-	LARGE_INTEGER qpcNow = { 0 };
-	if (m_fFreq)
-	{
-		if (QueryPerformanceCounter(&qpcNow))
-		{
-			if (m_nLastCounter)
-			{
-				m_nFramesSinceUpdate++;
-				fps = m_fFreq * m_nFramesSinceUpdate / double(qpcNow.QuadPart - m_nLastCounter);
-			}
-		}
-	}
-
-	//WCHAR szStatusMessage[64];
-	//StringCchPrintf(szStatusMessage, _countof(szStatusMessage), L" FPS = %0.2f    Time = %I64d", fps, (nTime - m_nStartTime));
-
-	//if (SetStatusMessage(szStatusMessage, 1000, false))
-	//{
-	//	m_nLastCounter = qpcNow.QuadPart;
-	//	m_nFramesSinceUpdate = 0;
-	//}
-
-	// Make sure we've received valid data
-	if (pBuffer)
-	{
-		CameraSpacePoint* csp = new CameraSpacePoint[nWidth * nHeight];
-		HRESULT hr = pCoordinateMapper->MapDepthFrameToCameraSpace(nWidth * nHeight, pBuffer, nWidth * nHeight, csp);
-
-		//printf("nMinDepth:%d\n", nMinDepth);
-		//printf("nMaxDepth:%d\n", nMaxDepth);
-
-		if (SUCCEEDED(hr)){
-			// end pixel is start + width*height - 1
-			//const CameraSpacePoint* cspEnd = csp + (nWidth * nHeight)£»
-
-			//while (csp < cspEnd)
-			for (int i = 0; i < nWidth * nHeight; i++)
-			{
-				//USHORT depth = static_cast<USHORT> (csp[i].Z);
-				
-				if (csp[i].Z >= (nMinDepth / 1000.0) && csp[i].Z <= (nMaxDepth / 1000.0)){
-					pointSet->new_vertex(vec3(-csp[i].X, -csp[i].Y, csp[i].Z));
-				}
-			}
-		}
-		delete[] csp;
-	}
-}
-
-/// <summary>
 /// Main processing function
 /// </summary>
-void CDepthBasics::GetPointsOfOneFrame(PointSet* pointSet)
+bool CDepthBasics::GetPointsOfOneFrame(PointSet* pointSet)
 {
 	if (!m_pDepthFrameReader)
 	{
-		return;
+		return false;
 	}
 
 	IDepthFrame* pDepthFrame = NULL;
@@ -189,59 +133,160 @@ void CDepthBasics::GetPointsOfOneFrame(PointSet* pointSet)
 
 	if (SUCCEEDED(hr))
 	{
-		INT64 nTime = 0;
-		IFrameDescription* pFrameDescription = NULL;
-		int nWidth = 0;
-		int nHeight = 0;
-		USHORT nDepthMinReliableDistance = 0;
-		USHORT nDepthMaxDistance = 0;
 		UINT nBufferSize = 0;
 		UINT16 *pBuffer = NULL;
 
-		hr = pDepthFrame->get_RelativeTime(&nTime);
+		hr = pDepthFrame->AccessUnderlyingBuffer(&nBufferSize, &pBuffer);
 
-		if (SUCCEEDED(hr))
+		if (SUCCEEDED(hr) && pBuffer)
 		{
-			hr = pDepthFrame->get_FrameDescription(&pFrameDescription);
+			CameraSpacePoint* csp = new CameraSpacePoint[depth_width * depth_height];
+			HRESULT hr = pCoordinateMapper->MapDepthFrameToCameraSpace(depth_width * depth_height, pBuffer, depth_width * depth_height, csp);
+
+			if (SUCCEEDED(hr)){
+				for (int i = 0; i < depth_width * depth_height; i++)
+				{
+					if (csp[i].Z >= (nDepthMinReliableDistance / 1000.0) && csp[i].Z <= (nDepthMaxDistance / 1000.0)){
+						pointSet->new_vertex(vec3(-csp[i].X, -csp[i].Y, csp[i].Z));
+					}
+				}
+			}
+			else{
+				return false;
+			}
+			delete[] csp;
 		}
-
-		if (SUCCEEDED(hr))
-		{
-			hr = pFrameDescription->get_Width(&nWidth);
+		else{
+			return false;
 		}
-
-		if (SUCCEEDED(hr))
-		{
-			hr = pFrameDescription->get_Height(&nHeight);
-		}
-
-		if (SUCCEEDED(hr))
-		{
-			hr = pDepthFrame->get_DepthMinReliableDistance(&nDepthMinReliableDistance);
-		}
-
-		if (SUCCEEDED(hr))
-		{
-			// In order to see the full range of depth (including the less reliable far field depth)
-			// we are setting nDepthMaxDistance to the extreme potential depth threshold
-			nDepthMaxDistance = USHRT_MAX;
-
-			// Note:  If you wish to filter by reliable depth distance, uncomment the following line.
-			//// hr = pDepthFrame->get_DepthMaxReliableDistance(&nDepthMaxDistance);
-		}
-
-		if (SUCCEEDED(hr))
-		{
-			hr = pDepthFrame->AccessUnderlyingBuffer(&nBufferSize, &pBuffer);
-		}
-
-		if (SUCCEEDED(hr))
-		{
-			ProcessDepth(nTime, pBuffer, nWidth, nHeight, nDepthMinReliableDistance, nDepthMaxDistance, pointSet);
-		}
-
-		SafeRelease(pFrameDescription);
+	}
+	else{
+		return false;
 	}
 
 	SafeRelease(pDepthFrame);
+
+	return true;
+}
+
+/// <summary>
+/// Main processing function
+/// </summary>
+bool CDepthBasics::GetDataOfOneFrame(PointSet* pointSet, UINT16* depth_data, unsigned char *rgb)
+{
+	if (!m_pDepthFrameReader)
+	{
+		return false;
+	}
+	
+	IColorFrame* pColorFrame = NULL;
+	ColorImageFormat imageFormat = ColorImageFormat_None;
+	UINT nBufferSize = 0;
+	RGBQUAD *c_pBuffer = NULL;
+
+	HRESULT hr = m_pColorFrameReader->AcquireLatestFrame(&pColorFrame);
+	
+	if (SUCCEEDED(hr))
+	{
+		hr = pColorFrame->get_RawColorImageFormat(&imageFormat);
+
+		if (SUCCEEDED(hr))
+		{
+			if (imageFormat == ColorImageFormat_Bgra)
+			{
+				hr = pColorFrame->AccessRawUnderlyingBuffer(&nBufferSize, reinterpret_cast<BYTE**>(&c_pBuffer));
+			}
+			else if (m_pColorRGBX)
+			{
+				c_pBuffer = m_pColorRGBX;
+				nBufferSize = rgb_width * rgb_height * sizeof(RGBQUAD);
+				hr = pColorFrame->CopyConvertedFrameDataToArray(nBufferSize, reinterpret_cast<BYTE*>(c_pBuffer), ColorImageFormat_Bgra);
+			}
+			else
+			{
+				hr = E_FAIL;
+			}
+		}
+		else{
+			return false;
+		}
+		
+		if (SUCCEEDED(hr) && c_pBuffer)
+		{
+			for (int i = 0; i < rgb_width * rgb_height; i++)
+			{
+				rgb[4 * i] = c_pBuffer[i].rgbRed;
+				rgb[4 * i + 1] = c_pBuffer[i].rgbGreen;
+				rgb[4 * i + 2] = c_pBuffer[i].rgbBlue;
+				rgb[4 * i + 3] = 255;
+			}
+		}
+	}
+	else{
+		return false;
+	}
+	
+	SafeRelease(pColorFrame);
+
+	IDepthFrame* pDepthFrame = NULL;
+
+	hr = m_pDepthFrameReader->AcquireLatestFrame(&pDepthFrame);
+	
+	if (SUCCEEDED(hr))
+	{
+		UINT nBufferSize = 0;
+		UINT16 *pBuffer = NULL;
+
+		hr = pDepthFrame->AccessUnderlyingBuffer(&nBufferSize, &pBuffer);
+
+		if (SUCCEEDED(hr) && pBuffer)
+		{
+			for (int i = 0; i < depth_width * depth_height; i++)
+			{
+				depth_data[i] = pBuffer[i];
+				//depth_data[i] = (pBuffer[i] >= nDepthMinReliableDistance) && (pBuffer[i] <= nDepthMaxDistance) ? pBuffer[i] : 0;
+			}
+
+			CameraSpacePoint* csp = new CameraSpacePoint[depth_width * depth_height];
+			HRESULT hr = pCoordinateMapper->MapDepthFrameToCameraSpace(depth_width * depth_height, pBuffer, depth_width * depth_height, csp);
+
+			if (SUCCEEDED(hr)){
+				for (int i = 0; i < depth_width * depth_height; i++)
+				{
+					if (csp[i].Z >= (nDepthMinReliableDistance / 1000.0) && csp[i].Z <= (nDepthMaxDistance / 1000.0)){
+						pointSet->new_vertex(vec3(-csp[i].X, -csp[i].Y, csp[i].Z));
+					}
+				}
+			}
+			else{
+				return false;
+			}
+			delete[] csp;
+		}
+		else{
+			return false;
+		}
+	}
+	else{
+		return false;
+	}
+	
+	SafeRelease(pDepthFrame);
+	return true;
+}
+
+int CDepthBasics::getDepthWidth(){
+	return depth_width;
+}
+
+int CDepthBasics::getDepthHeight(){
+	return depth_height;
+}
+
+int CDepthBasics::getRGBWidth(){
+	return rgb_width;
+}
+
+int CDepthBasics::getRGBHeight(){
+	return rgb_height;
 }
