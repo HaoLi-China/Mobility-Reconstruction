@@ -43,7 +43,7 @@ signals:
 protected:
 	void run();
 
-public:
+private:
 	uchar *rgb_data;
 	int rgb_width;
 	int rgb_height;
@@ -63,7 +63,7 @@ signals:
 protected:
 	void run();
 
-public:
+private:
 	ushort *depth_data;
 	int depth_width;
 	int depth_height;

@@ -606,12 +606,10 @@ void  MainWindow::computeNormalsForFrames(){
 
 //HaoLi:release saveDepthThread
 void  MainWindow::releaseDepthThread(SaveDepthThread* sdt){
-	std::cout << sdt->filename << std::endl;
 	delete sdt;
 }
 
 //HaoLi:release saveRGBThread
 void  MainWindow::releaseRGBThread(SaveRGBThread* srgbt){
-	std::cout << srgbt->filename << std::endl;
 	delete srgbt;
 }
